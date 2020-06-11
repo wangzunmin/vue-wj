@@ -15,7 +15,7 @@
   import Books from './Books'
   export default {
     name: 'LibraryIndex',
-    components: {SideMenu,Books}
+    components: {SideMenu, Books}
   }
 </script>
 

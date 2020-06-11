@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-row style="height: 840px;">
-      <!--<search-bar></search-bar>-->
-      <el-tooltip effect="dark" placement="right"
+    <search-bar @onSearch="searchBooks" ref="searchBar"></search-bar>
+    <el-row style="height: 500px;">
+      <el-tooltip effect="dark" placement="right" style="margin-top: 25px;"
                   v-for="item in books"
                   :key="item.id">
         <p slot="content" style="font-size: 14px;margin-bottom: 6px;">{{item.title}}</p>
@@ -37,28 +37,36 @@
 </template>
 
 <script>
+  import SearchBar from './SearchBar.vue'
   export default {
     name: 'Books',
+    components: {SearchBar},
     data () {
       return {
-        books: [
-          {
-            cover: 'https://i.loli.net/2019/04/10/5cada7e73d601.jpg',
-            title: '三体',
-            author: '刘慈欣',
-            date: '2019-05-05',
-            press: '重庆出版社',
-            abs: '文化大革命如火如荼进行的同时。军方探寻外星文明的绝秘计划“红岸工程”取得了突破性进展。但在按下发射键的那一刻，历经劫难的叶文洁没有意识到，她彻底改变了人类的命运。地球文明向宇宙发出的第一声啼鸣，以太阳为中心，以光速向宇宙深处飞驰……'
-          },
-          {
-            cover: 'https://i.loli.net/2020/06/11/cuyrZFe8DwMq5Cm.png',
-            title: '你当像鸟飞往你的山',
-            author: '塔拉 · 韦斯特弗',
-            date: '2019-11',
-            press: '南海出版公司',
-            abs: '17岁前从未上过学的女孩，如何成为剑桥大学博士？我们要背叛多少曾经，才能找到真正的自我！《纽约时报》 等数十家媒体一致公推“年度图书”，作者获选《时代周刊》年度影响力人物！这本书比你听说的还要好！'
+        books: []
+      }
+    },
+    mounted: function () {
+      this.loadBooks()
+    },
+    methods: {
+      loadBooks () {
+        var _this = this
+        this.$axios.get('/books').then(resp => {
+          if (resp) {
+            _this.books = resp.data
           }
-        ]
+        })
+      },
+      searchBooks () {
+        var _this = this
+        this.$axios
+          .get('/search?keywords=' + this.$refs.searchBar.input, {
+          }).then(resp => {
+          if (resp) {
+            _this.books = resp.data
+          }
+        })
       }
     }
   }
