@@ -36,7 +36,7 @@
           })
           .then(successResponse => {
             if (successResponse.data.code === 200) {
-              this.$router.replace({path: '/index'})
+              this.$router.replace({path: '/home'})
             }
           })
           .catch(failResponse => {
@@ -58,7 +58,7 @@
     box-shadow: 0 0 25px #cac6c6;
   }
   #poster {
-    background:url("../assets/eva.jpg") no-repeat;
+    background:url("../assets/615.jpg") no-repeat;
     background-position: center;
     height: 100%;
     width: 100%;

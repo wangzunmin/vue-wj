@@ -25,6 +25,7 @@
           <div class="author">{{item.author}}</div>
         </el-card>
       </el-tooltip>
+      <edit-form @onSubmit="loadBooks"></edit-form>
     </el-row>
     <el-row>
       <el-pagination
@@ -38,9 +39,10 @@
 
 <script>
   import SearchBar from './SearchBar.vue'
+  import EditForm from './EditForm.vue'
   export default {
     name: 'Books',
-    components: {SearchBar},
+    components: {SearchBar,EditForm},
     data () {
       return {
         books: []
@@ -61,7 +63,7 @@
       searchBooks () {
         var _this = this
         this.$axios
-          .get('/search?keywords=' + this.$refs.searchBar.input, {
+          .get('/search?keywords=' + this.$refs.searchBar.input, { // 获取子组件的属性
           }).then(resp => {
           if (resp) {
             _this.books = resp.data

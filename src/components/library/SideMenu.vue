@@ -1,7 +1,7 @@
 <template>
   <el-menu
     class="categories"
-    default-active="0"
+    :default-active="activeIndex"
     @select="handleSelect"
     active-text-color="red">
     <el-menu-item index="0">
@@ -37,7 +37,18 @@
 
 <script>
   export default {
-    name: 'SideMenu'
+    name: 'SideMenu',
+    data () {
+      return {
+        activeIndex: '0'
+      }
+    },
+    methods: {
+      handleSelect (index, indexPath) {
+        this.activeIndex = index
+        this.$emit('indexSelect')
+      }
+    }
   }
 </script>
 

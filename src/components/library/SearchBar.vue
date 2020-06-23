@@ -15,7 +15,7 @@
     },
     methods: {
       searchBook () {
-        this.$emit('onSearch')
+        this.$emit('onSearch') // 联系父组件的 触发父组件的自定义事件
       }
     }
   }
