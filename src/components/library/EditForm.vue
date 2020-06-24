@@ -21,6 +21,16 @@
         <el-form-item label="简介" :label-width="formLabelWidth">
           <el-input v-model="form.abs" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="分类" :label-width="formLabelWidth">
+          <el-select v-model="form.cid" placeholder="请选择" style="width: 515px;">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -43,8 +53,35 @@
           author: '',
           date: '',
           press: '',
-          abs: ''
-        }
+          abs: '',
+          cid: ''
+        },
+        options: [
+          {
+            value: '1',
+            label: '文学'
+          },
+          {
+            value: '2',
+            label: '流行'
+          },
+          {
+            value: '3',
+            label: '文化'
+          },
+          {
+            value: '4',
+            label: '生活'
+          },
+          {
+            value: '5',
+            label: '经管'
+          },
+          {
+            value: '6',
+            label: '科技'
+          }
+        ]
       }
     },
     methods: {
@@ -56,10 +93,18 @@
             author: this.form.author,
             date: this.form.date,
             press: this.form.press,
-            abs: this.form.abs
+            abs: this.form.abs,
+            cid: this.form.cid
           }).then(resp => {
           if (resp) {
             this.dialogFormVisible = false
+            this.form.cover=''
+            this.form.title=''
+            this.form.author=''
+            this.form.date=''
+            this.form.press=''
+            this.form.abs=''
+            this.form.cid=''
             this.$emit('onSubmit')
           }
         })
