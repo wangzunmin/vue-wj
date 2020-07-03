@@ -30,9 +30,10 @@
     </el-row>
     <el-row>
       <el-pagination
-        :current-page="1"
-        :page-size="10"
-        :total="20">
+        @current-change="changeCurrent"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="total">
       </el-pagination>
     </el-row>
   </div>
@@ -46,7 +47,10 @@
     components: {SearchBar,EditForm},
     data () {
       return {
-        books: []
+        books: [],
+        currentPage: 1,
+        pageSize: 1,
+        total: 0
       }
     },
     mounted: function () {
@@ -55,9 +59,10 @@
     methods: {
       loadBooks () {
         var _this = this
-        this.$axios.get('/books').then(resp => {
+        this.$axios.get('/pageBooks?pageSize=' + this.pageSize + '&currentPage=' + this.currentPage).then(resp => {
           if (resp) {
-            _this.books = resp.data
+            _this.books = resp.data.content
+            _this.total = resp.data.totalPages
           }
         })
       },
@@ -70,6 +75,10 @@
             _this.books = resp.data
           }
         })
+      },
+      changeCurrent (currentPage) {
+        this.currentPage = currentPage
+        this.loadBooks()
       }
     }
   }
