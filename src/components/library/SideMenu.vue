@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import Bus from '../bus.js'
   export default {
     name: 'SideMenu',
     data () {
@@ -45,8 +46,9 @@
     },
     methods: {
       handleSelect (index, indexPath) {
-        this.activeIndex = index
-        this.$emit('indexSelect')
+        this.activeIndex = index //cid
+        Bus.$emit('dataChild',index, 1) // 兄弟节点之间的传值
+        this.$emit("indexSelect")
       }
     }
   }

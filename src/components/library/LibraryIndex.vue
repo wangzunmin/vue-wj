@@ -19,14 +19,16 @@
     methods: {
       selectIndex () {
         var _this = this
-        var cid = _this.$refs.sideMenu.activeIndex  //组件之间的通信
+        // this.cid = _this.$refs.sideMenu.activeIndex  //组件之间的通信
+        // cid传递到books.vue中
+        _this.$refs.booksArea.loadBooks()
         // 根据cid 调用api接口查询该目录下的数据
-        var url = "categories/" + cid + "/books"
-        this.$axios.get(url).then(resp => {
-          if (resp) {
-            _this.$refs.booksArea.books = resp.data
-          }
-        })
+        // var url = "categories/" + cid + "/books"
+        // this.$axios.get(url).then(resp => {
+        //   if (resp) {
+        //     _this.$refs.booksArea.books = resp.data
+        //   }
+        // })
       }
     }
   }

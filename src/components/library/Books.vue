@@ -42,6 +42,7 @@
 <script>
   import SearchBar from './SearchBar.vue'
   import EditForm from './EditForm.vue'
+  import Bus from '../bus.js'
   export default {
     name: 'Books',
     components: {SearchBar,EditForm},
@@ -49,32 +50,45 @@
       return {
         books: [],
         currentPage: 1,
-        pageSize: 1,
-        total: 0
+        pageSize: 2,
+        total: 0,
+        cid: 0,
+        input: ''
       }
     },
     mounted: function () {
       this.loadBooks()
     },
+    // 兄弟节点之间的传值 通过bus.js媒介
+    created () {
+      var _this = this
+      Bus.$on('dataChild',(index, currentPage)=>{
+        this.cid = index
+        this.currentPage = currentPage  //切换cid 置当前页为1
+      })
+    },
     methods: {
       loadBooks () {
         var _this = this
-        this.$axios.get('/pageBooks?pageSize=' + this.pageSize + '&currentPage=' + this.currentPage).then(resp => {
+        this.$axios.get('/pageBooks?pageSize=' + this.pageSize + '&currentPage=' + this.currentPage
+        + '&cid=' + this.cid + "&title=" + _this.input).then(resp => {
           if (resp) {
             _this.books = resp.data.content
-            _this.total = resp.data.totalPages
+            _this.total = resp.data.totalElements
           }
         })
       },
       searchBooks () {
         var _this = this
-        this.$axios
-          .get('/search?keywords=' + this.$refs.searchBar.input, { // 获取子组件的属性
-          }).then(resp => {
-          if (resp) {
-            _this.books = resp.data
-          }
-        })
+        _this.input = _this.$refs.searchBar.input
+        _this.loadBooks()
+        // this.$axios
+        //   .get('/search?keywords=' + this.$refs.searchBar.input, { // 获取子组件的属性
+        //   }).then(resp => {
+        //   if (resp) {
+        //     _this.books = resp.data
+        //   }
+        // })
       },
       changeCurrent (currentPage) {
         this.currentPage = currentPage
