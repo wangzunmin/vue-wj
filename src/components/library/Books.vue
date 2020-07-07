@@ -28,7 +28,7 @@
       </el-tooltip>
       <edit-form @onSubmit="loadBooks"></edit-form>
     </el-row>
-    <el-row>
+    <el-row style="margin-top: 145px;">
       <el-pagination
         @current-change="changeCurrent"
         :current-page="currentPage"
@@ -50,7 +50,7 @@
       return {
         books: [],
         currentPage: 1,
-        pageSize: 2,
+        pageSize: 10,
         total: 0,
         cid: 0,
         input: ''
@@ -70,8 +70,16 @@
     methods: {
       loadBooks () {
         var _this = this
-        this.$axios.get('/pageBooks?pageSize=' + this.pageSize + '&currentPage=' + this.currentPage
-        + '&cid=' + this.cid + "&title=" + _this.input).then(resp => {
+        // axios 使用 post 发送数据时，默认是直接把 json 放到请求体中提交到后端的
+        // 也就是前端请求 Content-Type 变成了 application/json;charset=utf-8
+        // 实际后端要求的 'Content-Type': 'application/x-www-form-urlencoded' 为多见
+        //所以定义URLSearchParams方式处理
+        let param = new URLSearchParams()
+        param.append("pageSize", this.pageSize)
+        param.append("currentPage", this.currentPage)
+        param.append("cid", this.cid)
+        param.append("title", this.input)
+        this.$axios.post('/pageBooks', param).then(resp => {
           if (resp) {
             _this.books = resp.data.content
             _this.total = resp.data.totalElements
