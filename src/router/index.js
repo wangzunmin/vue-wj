@@ -6,8 +6,9 @@ import Home from '@/components/Home'
 import LibraryIndex from '@/components/library/LibraryIndex'
 
 Vue.use(Router)
-
+// 路由模式history和hash，默认的hash模式会带#号
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/login',

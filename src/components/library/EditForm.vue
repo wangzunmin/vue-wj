@@ -48,6 +48,7 @@
         formLabelWidth: '120px',
         dialogFormVisible: false,
         form: {
+          id: null,
           cover: '',
           title: '',
           author: '',
@@ -88,6 +89,7 @@
       submit() {
         this.$axios
           .post('/add', {
+            id: this.form.id,
             cover: this.form.cover,
             title: this.form.title,
             author: this.form.author,
@@ -98,6 +100,7 @@
           }).then(resp => {
           if (resp) {
             this.dialogFormVisible = false
+            this.form.id=null
             this.form.cover=''
             this.form.title=''
             this.form.author=''

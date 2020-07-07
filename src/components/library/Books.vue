@@ -14,7 +14,7 @@
         <p slot="content" style="width: 300px" class="abstract">{{item.abs}}</p>
         <el-card style="width: 145px;margin-bottom: 20px;height: 270px;float: left;margin-right: 15px" class="book"
                  bodyStyle="padding:10px" shadow="hover">
-          <div class="cover">
+          <div class="cover" @click="editBook(item)">
             <img :src="item.cover" alt="封面">
           </div>
           <div class="info">
@@ -23,10 +23,10 @@
             </div>
           </div>
           <div class="author">{{item.author}}</div>
-          <div style="padding-left: 107px;float: right;"><i class="el-icon-delete"></i></div>
+          <div style="padding-left: 107px;float: right;"><i class="el-icon-delete" @click="deleteBook(item.id)"></i></div>
         </el-card>
       </el-tooltip>
-      <edit-form @onSubmit="loadBooks"></edit-form>
+      <edit-form @onSubmit="loadBooks" ref="edit"></edit-form>
     </el-row>
     <el-row style="margin-top: 145px;">
       <el-pagination
@@ -101,6 +101,31 @@
       changeCurrent (currentPage) {
         this.currentPage = currentPage
         this.loadBooks()
+      },
+      deleteBook (id) {
+        this.$axios.get('/delete/'+ id + "/books").then(resp => {
+          if (resp) {
+            if(resp.data=='1')
+            this.$message({
+              message: '删除成功！',
+              type: 'success'
+            });
+            this.loadBooks()
+          }
+        })
+      },
+      editBook (item) {
+        this.$refs.edit.dialogFormVisible = true
+        this.$refs.edit.form = {
+          id: item.id,
+          cover: item.cover,
+          title: item.title,
+          author: item.author,
+          date: item.date,
+          press: item.press,
+          abs: item.abs,
+          cid: item.cid
+        }
       }
     }
   }
